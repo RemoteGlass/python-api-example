@@ -132,7 +132,6 @@ class AddRecord(Resource):
 
 api.add_resource(AddRecord, "/add-record")
 api.add_resource(Records, "/records")
-api.add_resource(UppercaseText, "/uppercase")
 
 
 if __name__ == "__main__":

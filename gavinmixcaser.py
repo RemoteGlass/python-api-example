@@ -6,10 +6,10 @@ app = Flask(__name__)
 api = Api(app)
 swagger = Swagger(app)
 
-class UppercaseText(Resource):
+class GavinMixcaser(Resource):
     def get(self):
         """
-        This method responds to the GET request for this endpoint and returns the data in uppercase.
+        This method responds to the GET request for this endpoint and returns the data in mixcase.
         ---
         tags:
         - Text Processing
@@ -18,7 +18,7 @@ class UppercaseText(Resource):
               in: query
               type: string
               required: true
-              description: The text to be converted to uppercase
+              description: The text to be converted to mixcase
         responses:
             200:
                 description: A successful GET request
@@ -29,11 +29,16 @@ class UppercaseText(Resource):
                         properties:
                             text:
                                 type: string
-                                description: The text in uppercase
+                                description: The text in mixcase
+                             
         """
         text = request.args.get('text')
-
-        return {"text": text.upper()}, 200
+        textuppper = text.upper()
+        textlowwer = text.lower()
+        textmix = textuppper + textlowwer
+        return {"text": textmix}, 200
+      
+    
     
 class ProcessText(Resource):
     def get(self):
@@ -57,7 +62,7 @@ class ProcessText(Resource):
               in: query
               type: string
               required: false
-              enum: [UPPER, LOWER, None]
+              enum: [UPPER, LOWER,MIXED,UPPER LOWER, None]
               description: The capitalization style for the text
         responses:
             200:
@@ -74,9 +79,17 @@ class ProcessText(Resource):
         text = request.args.get('text')
         duplication_factor = int(request.args.get('duplication_factor', 1))
         capitalization = request.args.get('capitalization', 'None')
+        def mixedtextchecker(){
+            if text == text.upper(){
+                text.upper()
+            }
+            if text == text.lower(){
+                text.lower()
+            }
 
+        }
         # Validate capitalization input
-        if capitalization not in ['UPPER', 'LOWER', 'None']:
+        if capitalization not in ['UPPER', 'LOWER', 'UPPER LOWER', 'MIXED', 'None']:
             return {"error": "Invalid capitalization value"}, 400
 
         # Process the text based on duplication_factor and capitalization
@@ -84,13 +97,21 @@ class ProcessText(Resource):
             text = text.upper()
         elif capitalization == 'LOWER':
             text = text.lower()
-
+        elif capitalization == 'MIXED':
+            mixedtextchecker()
+        elif capitalization == 'UPPER LOWER':
+            text = text.lower()
+            text = text.lower()
+            mixedtext = text.lower() + " " + text.upper()
+    
         processed_text = text * duplication_factor
 
         return {"processed_text": processed_text}, 200
 
 api.add_resource(ProcessText, "/process_text")
-api.add_resource(UppercaseText, "/uppercase")
+api.add_resource(GavinMixcaser, "/mixcase")
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+

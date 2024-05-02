@@ -6,10 +6,10 @@ app = Flask(__name__)
 api = Api(app)
 swagger = Swagger(app)
 
-class UppercaseText(Resource):
+class GavinLowercaser(Resource):
     def get(self):
         """
-        This method responds to the GET request for this endpoint and returns the data in uppercase.
+        This method responds to the GET request for this endpoint and returns the data in Lowercase.
         ---
         tags:
         - Text Processing
@@ -18,7 +18,7 @@ class UppercaseText(Resource):
               in: query
               type: string
               required: true
-              description: The text to be converted to uppercase
+              description: The text to be converted to lowercase
         responses:
             200:
                 description: A successful GET request
@@ -29,11 +29,11 @@ class UppercaseText(Resource):
                         properties:
                             text:
                                 type: string
-                                description: The text in uppercase
+                                description: The text in lowercase
         """
         text = request.args.get('text')
 
-        return {"text": text.upper()}, 200
+        return {"text": text.lower()}, 200
     
 class ProcessText(Resource):
     def get(self):
@@ -90,7 +90,7 @@ class ProcessText(Resource):
         return {"processed_text": processed_text}, 200
 
 api.add_resource(ProcessText, "/process_text")
-api.add_resource(UppercaseText, "/uppercase")
+api.add_resource(GavinLowercaser, "/lowercase")
 
 if __name__ == "__main__":
     app.run(debug=True)
